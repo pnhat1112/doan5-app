@@ -10,22 +10,47 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from 'react';
+import axios from 'axios';
 
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userInfo, setUserInfo] = useState(null);
 
-//   const handleSubmit = () => {
-//     // Validate form and send request to backend
-//   };
-//   const handleButtonPress = () => {
-//     Alert.alert("email: " + email + "\n password: " + password);
-//   };
+  const handleSubmit = () => {
+    // Validate form and send request to backend
+    // axios.post("http://192.168.1.10:5000/user/signin", 
+    //   {
+    //     email: 'email@gmail.com',
+    //     password: 'abc'
+    //   },
+    // )
+    // .then(response => {
+    //   console.log(response.data);
+    // })
+    // .catch(error => {
+    //   console.error(error);
+    // });
+    axios
+      .post('http://192.168.1.10:3000/user/signin', {
+        email: email,
+        password: password
+      })
+      .then(function (response) {
+        // handle success
+        alert(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error.message);
+      });
+    
+    Alert.alert("email: " + email + "\n password: " + password);
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Đăng nhập</Text>
-      <StatusBar style="auto" />
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -37,7 +62,7 @@ export default function Login() {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Password."
+          placeholder="Mật khẩu."
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
@@ -46,14 +71,25 @@ export default function Login() {
       <TouchableOpacity style={styles.forgot_button}>
         <Text>Quên mật khẩu</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText} onPress={handleButtonPress}>Đăng nhập</Text> 
+      <TouchableOpacity style={styles.loginBtn}  onPress={handleSubmit}>
+        <Text>Đăng nhập</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.registerBtn}>
-        <Text style={styles.loginText}>Đăng ký</Text> 
+
+      {/* {userInfo ? (
+        <Text>Welcome, {userInfo.name}!</Text>
+      ) : (
+        <GoogleSignin.Button
+          onPress={handleGoogleSignIn}
+          size={GoogleSignin.Size.Wide}
+          color={GoogleSignin.Color.Dark}
+        />
+      )}
+       */}
+      <TouchableOpacity style={styles.registerBtn}  onPress={() => navigation.navigate('Register')}>
+        <Text>Đăng ký</Text> 
       </TouchableOpacity>
       <View style={styles.image} >
-        <Image source={require("./assets/login.png")} />
+        <Image source={require("../../assets/login.png")} />
       </View> 
     </View>
   );
