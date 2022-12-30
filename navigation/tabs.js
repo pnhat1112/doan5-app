@@ -34,12 +34,15 @@ const CustomTabBarButton = (children, onPress) => {
                         height: 30,
                     }}
                 />
-            <Text style={{fontSize: 12}}>Đăng bài</Text>
+                <Text style={{fontSize: 12}}>Đăng bài</Text>
             </View>
         </TouchableOpacity>
     )
 }
 const Tabs = () => {
+    const handleButtonPress = () => {
+        navigation.navigate('Settings');
+      };
     return (
       <Tab.Navigator
         screenOptions={{ 
@@ -106,10 +109,29 @@ const Tabs = () => {
         />
         <Tab.Screen name="PostNews" component={PostNews} 
            options= {{
-            tabBarButton: (props) => {
+            tabBarIcon: (props) => {
                 return(
                     // <CustomTabBarButton { ...props }/>
-                    <CustomTabBarButton/>
+                    <View style={{
+                        top: -30,
+                        ...style.shadow,
+                        width: 80,
+                        height: 80,
+                        borderRadius: 40,
+                        backgroundColor: '#FBD07C',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        <Image
+                            source={require("../assets/icon/create.png")}
+                            resizeMode='contain'
+                            style={{
+                                width: 30,
+                                height: 30,
+                            }}
+                        />
+                        <Text style={{fontSize: 12}}>Đăng bài</Text>
+                    </View>
                 )
             },
         }}

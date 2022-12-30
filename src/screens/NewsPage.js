@@ -4,15 +4,16 @@ import { SearchBar } from 'react-native-elements';
 import SearchBox from '../components/SearchBox.js';
 import axios from 'axios';
 
-function NewsPage({ navigation, title, imageUrl, author, onPressView, onPressLove} ) {
+function NewsPage({ route } ) {
+  const data = route.params;
     return (
       <View style={styles.container}>
         <SearchBox />
         <TouchableOpacity style={styles.forgot_button}>
-            <Text onPress={() => navigation.goBack()}>Trở về trang chủ</Text> 
+            <Text onPress={() => navigation.goBack()}>{data}</Text> 
         </TouchableOpacity> 
         <Image source={require("../../assets/slider1.png")} />
-        <Text>{title}</Text>
+        <Text>{data}</Text>
         
     </View>
     );
