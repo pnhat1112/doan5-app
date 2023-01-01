@@ -63,7 +63,7 @@ export default function Home() {
     const [searchText, setSearchText] = React.useState('');
     const [articles, setArticles] = React.useState([]);
     useEffect(() => {
-      Axios.get("http://localhost:5000/articles/", {
+      Axios.get("http://192.168.1.111:5000/articles/", {
         headers: {
           "Content-Type": "application/json",
         },

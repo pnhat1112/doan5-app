@@ -9,16 +9,19 @@ const NewsCard = ({
   onPressView,
   onPressLove,
 }) => {
-  console.log(imageUrl);
+//   console.log(imageUrl);
   const a = "../../assets/slider2.png";
   return (
     <View>
       <TouchableOpacity style={styles.cardForm} onPress={onPressView}>
-        {/* <Image source={require(a) } style={styles.Image} /> */}
         <Image
-          style={{ width: 200, height: 200 }}
-          source={{ uri: `data:image/png;base64,${imageUrl}` }}
+          style={{
+            width: 180,
+            height: 100,
+          }}
+          source={{ uri: imageUrl }}
         />
+
         <View style={styles.TitleForm}>
           <Text style={styles.Title}>{title}</Text>
           <Text style={styles.Author}>{author}</Text>
