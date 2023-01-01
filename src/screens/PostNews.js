@@ -21,21 +21,21 @@ const PostNews = () => {
     selectedWard
   } = state;
   const handleAddressPress = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Home', 'Work', 'Other'],
-        cancelButtonIndex: 2,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          // Handle selection of "Home"
-          console.log(cityOptions);
-        } else if (buttonIndex === 1) {
-          // Handle selection of "Work"
-          console.log(selectedDistrict);
-        }
-      },
-    );
+    // ActionSheetIOS.showActionSheetWithOptions(
+    //   {
+    //     options: ['Home', 'Work', 'Other'],
+    //     cancelButtonIndex: 2,
+    //   },
+    //   (buttonIndex) => {
+    //     if (buttonIndex === 0) {
+    //       // Handle selection of "Home"
+    //       console.log(cityOptions);
+    //     } else if (buttonIndex === 1) {
+    //       // Handle selection of "Work"
+    //       console.log(selectedDistrict);
+    //     }
+    //   },
+    // );
   };
   return (
     <View style={styles.container}>

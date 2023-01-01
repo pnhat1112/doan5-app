@@ -6,7 +6,7 @@ import NewsCard from '../components/NewsCard.js';
 // import NewsPage from './NewsPage.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import axios from 'axios';
+import Axios from 'axios';
 
 const Stack = createStackNavigator();
 const Data = {
@@ -61,134 +61,149 @@ export default function Home() {
 
   function HomePage({ navigation }) {
     const [searchText, setSearchText] = React.useState('');
-    const articles = [
-      {
-        user_id: "id1",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Cho thuê nhà trọ gần ĐH Việt Hàn, đường Nam Kì Khởi Nghĩa",
-        price: "1500000",
-        square: 12,
-        content: "Object content",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "149 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id2",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Cho thuê nhà trọ đường Trần Đại Nghĩa",
-        price: "2500000",
-        square: 12,
-        content: "Object content",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "140 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id3",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Cho thuê nhà nguyên căn đầy đủ nội thất đường Phạm Thận Duật",
-        square: 12,
-        content: "Object content",
-        price: "1800000",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "140 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id4",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Cho thuê nhà nguyên căn đầy đủ nội thất đường Huỳnh Lắm",
-        square: 12,
-        content: "Object content",
-        price: "2000000",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "140 Huỳnh Lắm, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id5",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
-        price: "1600000",
-        square: 12,
-        content: "Object content",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id5",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
-        price: "1600000",
-        square: 12,
-        content: "Object content",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-      {
-        user_id: "id5",
-        gac_lung: true,
-        nau_an: true,
-        image: "String",
-        tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
-        price: "1600000",
-        square: 12,
-        content: "Object content",
-        so_nguoi: 2,
-        image_wc: "String",
-        image_tu_cua: "String",
-        address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
-        // createdAt: {
-        //     type: Date,
-        //     default: new Date(),
-        // },
-      },
-    ];
+    const [articles, setArticles] = React.useState([]);
+    useEffect(() => {
+      Axios.get("http://localhost:5000/articles/", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          setArticles(response.data)
+        })
+        .catch((error) => {
+          // An error occurred
+          console.error(error);
+        });
+    }, []);
+    // const articles = [
+    //   {
+    //     user_id: "id1",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Cho thuê nhà trọ gần ĐH Việt Hàn, đường Nam Kì Khởi Nghĩa",
+    //     price: "1500000",
+    //     square: 12,
+    //     content: "Object content",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "149 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id2",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Cho thuê nhà trọ đường Trần Đại Nghĩa",
+    //     price: "2500000",
+    //     square: 12,
+    //     content: "Object content",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "140 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id3",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Cho thuê nhà nguyên căn đầy đủ nội thất đường Phạm Thận Duật",
+    //     square: 12,
+    //     content: "Object content",
+    //     price: "1800000",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "140 Trần Đại Ngĩa, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id4",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Cho thuê nhà nguyên căn đầy đủ nội thất đường Huỳnh Lắm",
+    //     square: 12,
+    //     content: "Object content",
+    //     price: "2000000",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "140 Huỳnh Lắm, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id5",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
+    //     price: "1600000",
+    //     square: 12,
+    //     content: "Object content",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id5",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
+    //     price: "1600000",
+    //     square: 12,
+    //     content: "Object content",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    //   {
+    //     user_id: "id5",
+    //     gac_lung: true,
+    //     nau_an: true,
+    //     image: "String",
+    //     tieude: "Trọ Mới Xây Đường Nguyễn Duy Cung",
+    //     price: "1600000",
+    //     square: 12,
+    //     content: "Object content",
+    //     so_nguoi: 2,
+    //     image_wc: "String",
+    //     image_tu_cua: "String",
+    //     address: "10 Nguyễn Duy Cung, Phường Hòa Hải, Quận Ngũ Hành Sơn, Đà Nẵng",
+    //     // createdAt: {
+    //     //     type: Date,
+    //     //     default: new Date(),
+    //     // },
+    //   },
+    // ];
     const onChangeSearch = text => setSearchText(text);
     const handleSearch = () => {
       // perform search here
@@ -207,7 +222,7 @@ export default function Home() {
             renderItem={({ item }) => (
               <NewsCard 
                 title= {item.tieude}
-                imageUrl="../../assets/slider1.png"
+                imageUrl={item.image}
                 author= {item.user_id}
                 price= {item.price}
                 onPressView={ () => navigation.navigate('NewsPage', {data : item})}
