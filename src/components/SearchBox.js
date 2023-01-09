@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, TextInput, Button, Header, StyleSheet } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-const SearchBox = () => {
+const SearchBox = ({setSearchTextt}) => {
   const [searchText, setSearchText] = React.useState('');
   const onChangeSearch = text => setSearchText(text);
   const handleSearch = () => {
     // perform search here
-    alert(`Searching for: ${searchText}`);
+    setSearchTextt(searchText)
   };
 
   return (
