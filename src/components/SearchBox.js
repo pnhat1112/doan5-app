@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, TextInput, Button, Header, StyleSheet } from 'react-native';
 import { SearchBar } from 'react-native-elements';
+import { useNavigation } from "@react-navigation/native";
+
 const SearchBox = ({setSearchTextt}) => {
+  const navigation = useNavigation();
   const [searchText, setSearchText] = React.useState('');
   const onChangeSearch = text => setSearchText(text);
   const handleSearch = () => {
     // perform search here
     setSearchTextt(searchText)
+    navigation.navigate("HomePage");
   };
 
   return (

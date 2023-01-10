@@ -18,6 +18,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Axios from "axios";
 import { api } from "../resources/api.js";
+import { useNavigation } from "@react-navigation/native";
+
 
 const Stack = createStackNavigator();
 const Data = {};
@@ -74,12 +76,12 @@ function HomePage({ navigation }) {
   const [articles, setArticles] = React.useState([]);
   const [backup, setBackup] = React.useState([]);
   useEffect(() => {
+    let filteredArr = articles.filter(function(item) {
+      return item.tieude.toLowerCase().includes(searchText.toLowerCase()) || item.address.toLowerCase().includes(searchText.toLowerCase());
+    });
     if(searchText!=""){
       setBackup(articles)
-      const results = articles.filter(item =>
-        item.tieude.toLowerCase().includes(searchText.toLowerCase())
-      );
-      setArticles(results);
+      setArticles(filteredArr);
     }
     else{
       setArticles(backup)
@@ -117,7 +119,7 @@ function HomePage({ navigation }) {
               author={item.user_id}
               price={item.price}
               onPressView={() =>
-                navigation.navigate("NewsPage", { data: { item } })
+                navigation.navigate("NewsPage", { data: { item, setSearchText } })
               }
               onPressLove={() => alert("Love")}
             />
@@ -156,7 +158,7 @@ function NewsPage({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView scrollEnabled>
-        <SearchBox />
+        <SearchBox setSearchTextt = {data?.setSearchText}/>
         <View style={{ alignItems: "center", position: "static" }}>
           <View style={{ flexDirection: "row", zIndex: 1 }}>
             <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
