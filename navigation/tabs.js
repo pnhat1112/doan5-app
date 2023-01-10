@@ -5,6 +5,7 @@ import PostNews from '../src/screens/PostNews';
 import NewsLike from '../src/screens/NewsLike';
 import Account from '../src/screens/Account';
 import Login from '../src/screens/Login';
+import React, { useState } from "react";
 
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 const Tab = createBottomTabNavigator();

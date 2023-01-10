@@ -80,7 +80,6 @@ function HomePage({ navigation }) {
       return item.tieude.toLowerCase().includes(searchText.toLowerCase()) || item.address.toLowerCase().includes(searchText.toLowerCase());
     });
     if(searchText!=""){
-      setBackup(articles)
       setArticles(filteredArr);
     }
     else{
@@ -95,6 +94,7 @@ function HomePage({ navigation }) {
     })
       .then((response) => {
         setArticles(response.data);
+        setBackup(response.data)
       })
       .catch((error) => {
         // An error occurred

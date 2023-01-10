@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -9,44 +9,53 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import Axios from "axios";
+import { api } from "../resources/api.js";
 
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
   const handleSubmit = () => {
     // Validate form and send request to backend
-    // axios.post("http://192.168.1.10:5000/user/signin", 
-    //   {
-    //     email: 'email@gmail.com',
-    //     password: 'abc'
-    //   },
-    // )
-    // .then(response => {
-    //   console.log(response.data);
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // });
-    axios
-      .post('http://192.168.1.10:3000/user/signin', {
-        email: email,
-        password: password
+    // Axios.post(`${api}/user/signin/`)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    Axios.
+    post(`${api}/user/signin/`, {email:"toi6@toi6.com",password:"123456"}, {
+        headers: {
+          "Content-Type": "application/json"
+        },
       })
-      .then(function (response) {
-        // handle success
-        alert(JSON.stringify(response.data));
+      .then((response) => {
+        console.log(response.data);
       })
-      .catch(function (error) {
-        // handle error
-        alert(error.message);
+      .catch((error) => {
+        console.log(error);
       });
-    
-    Alert.alert("email: " + email + "\n password: " + password);
+    // axios
+    //   .post('http://192.168.1.111:3000/user/signin', {
+    //     email: email,
+    //     password: password
+    //   })
+    //   .then(function (response) {
+    //     // handle success
+    //     alert(JSON.stringify(response.data));
+    //   })
+    //   .catch(function (error) {
+    //     // handle error
+    //     alert(error.message);
+    //   });
+
+    // Alert.alert("email: " + email + "\n password: " + password);
+    // console.log("asdasd")
   };
   return (
     <View style={styles.container}>
@@ -58,8 +67,8 @@ export default function Login({ navigation }) {
           placeholder="Email."
           placeholderTextColor="#003f5c"
           onChangeText={(email) => setEmail(email)}
-        /> 
-      </View> 
+        />
+      </View>
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -67,14 +76,14 @@ export default function Login({ navigation }) {
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
-        /> 
-      </View> 
+        />
+      </View>
       <TouchableOpacity style={styles.forgot_button}>
-        <Text>Quên mật khẩu</Text> 
-      </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn}  onPress={handleSubmit}>
-        <Text>Đăng nhập</Text> 
-      </TouchableOpacity> 
+        <Text>Quên mật khẩu</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
+        <Text>Đăng nhập</Text>
+      </TouchableOpacity>
 
       {/* {userInfo ? (
         <Text>Welcome, {userInfo.name}!</Text>
@@ -86,12 +95,15 @@ export default function Login({ navigation }) {
         />
       )}
        */}
-      <TouchableOpacity style={styles.registerBtn}  onPress={() => navigation.navigate('Register')}>
-        <Text>Đăng ký</Text> 
+      <TouchableOpacity
+        style={styles.registerBtn}
+        onPress={() => navigation.navigate("Register")}
+      >
+        <Text>Đăng ký</Text>
       </TouchableOpacity>
-      <View style={styles.image} >
+      <View style={styles.image}>
         <Image source={require("../../assets/login.png")} />
-      </View> 
+      </View>
     </View>
   );
 }
@@ -99,18 +111,18 @@ export default function Login({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     marginBottom: 40,
     fontSize: 26,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   image: {
-    position: 'absolute',
-    bottom: 0
+    position: "absolute",
+    bottom: 0,
   },
   inputView: {
     backgroundColor: "#FCFDFE",
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
     alignItems: "Left",
-    borderWidth: 1
+    borderWidth: 1,
   },
   TextInput: {
     height: 50,
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   forgot_button: {
     height: 30,
     marginBottom: 30,
-    alignItems: 'Left'
+    alignItems: "Left",
   },
   loginBtn: {
     width: "80%",
@@ -140,7 +152,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 30,
     backgroundColor: "#FBD07C",
-    
   },
   registerBtn: {
     width: "80%",
@@ -151,6 +162,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 200,
     backgroundColor: "#FFFFFF",
-    borderWidth: 1
+    borderWidth: 1,
   },
 });
