@@ -49,7 +49,7 @@ const NewsManager = ({navigation}) => {
   }, []);
   return (
     <View style={styles.container}>
-      <p> {user?.details.full_name} </p>
+      <p> {user} </p>
     </View>
   );
 }
