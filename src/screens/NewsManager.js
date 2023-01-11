@@ -16,25 +16,61 @@ import NewsCard from "../components/NewsCard.js";
 import Axios from "axios";
 import { api } from "../resources/api.js";
 import NewsCardEdit from "../components/NewsCardEdit.js";
-import {AsyncStorage} from 'react-native';
 
-
-const NewsManager = ({navigation}) => {
+const NewsManager = ({ navigation }) => {
+  const [change, setChange] = React.useState(0);
   const [articles, setArticles] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
   const [backup, setBackup] = React.useState([]);
-  const [user, setUser] = React.useState(null);
-
-  useEffect(()=>{
-    const fetchLocal = async () => {
-    const access_token = await AsyncStorage.getItem('user');
-    setUser(access_token)
-    }
-    fetchLocal()
-  },[])
-
+  // useEffect(()=>{
+  //   const fetchLocal = async () => {
+  //   const access_token = await AsyncStorage.getItem('user');
+  //   setUser(access_token)
+  //   }
+  //   fetchLocal()
+  // },[])
+  const handleStatusChange = async (id,status)=>{
+    console.log(id)
+    Axios.get(
+        `${api}/articles/update-status/${id}/${status}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+            console.log(response.data.message);
+            setChange(change+1)
+            // window.location.reload();
+        })
+        .catch((error) => {
+          // An error occurred
+          console.error(error);
+        });
+  }
+  const handleDelete = async (id)=>{
+    console.log(id)
+    Axios.get(
+        `${api}/articles/remove/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          console.log(response.data.message);
+          setChange(change+1)
+        })
+        .catch((error) => {
+          // An error occurred
+          console.error(error);
+        });
+  }
   useEffect(() => {
-    Axios.get(`${api}/articles/`, {
+    const id = "63bebcca0dcb2df9b911cd8d";
+    Axios.get(`${api}/articles/get-by-id/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -46,13 +82,70 @@ const NewsManager = ({navigation}) => {
         // An error occurred
         console.error(error);
       });
-  }, []);
+  }, [change]);
   return (
     <View style={styles.container}>
-      <p> {user} </p>
+      <SearchBox setSearchTextt={setSearchText} />
+      <View style={styles.titleForm}>
+        <Text style={styles.title}>Tin của bạn</Text>
+      </View>
+      <View style={{ height: "auto" }}>
+        <FlatList
+          data={articles}
+          renderItem={({ item }) => (
+            <View>
+              {item.public === true ? (
+                <NewsCardEdit
+                  title={item.tieude}
+                  imageUrl={item.image}
+                  author={item.user_id}
+                  price={item.price}
+                  onPressView={() =>
+                    navigation.navigate("NewsPage", {
+                      data: { item, setSearchText },
+                    })
+                  }
+                  onPressLove={() =>  handleStatusChange(item._id, false)}
+                  onPressDelete={() => handleDelete(item._id)}
+                />
+              ) : null}
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      <View style={styles.titleForm}>
+        <Text style={styles.title}>Tin đã ẩn</Text>
+      </View>
+      <View style={{ height: "auto" }}>
+        <FlatList
+          data={articles}
+          renderItem={({ item }) => (
+            <View>
+              {item.public === false ? (
+                <NewsCardEdit
+                  title={item.tieude}
+                  imageUrl={item.image}
+                  author={item.user_id}
+                  price={item.price}
+                  onPressView={() =>
+                    navigation.navigate("NewsPage", {
+                      data: { item, setSearchText },
+                    })
+                  }
+                  onPressLove={() => handleStatusChange(item._id, true)}
+                  onPressDelete={() => handleDelete(item._id)}
+
+                />
+              ) : null}
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
     </View>
   );
-}
+};
 
 export default NewsManager;
 

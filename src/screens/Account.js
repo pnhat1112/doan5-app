@@ -33,7 +33,7 @@ const Account = ({setUserInfoo, userInforr}) => {
           />
           <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
             <Text style={styles.userName}>{userInforr.details.full_name}</Text>
-            <Text style={{marginLeft: 15}}>10 người theo dõi</Text>
+            {/* <Text style={{marginLeft: 15}}>10 người theo dõi</Text> */}
           </View>
         </TouchableOpacity>
       </View>
@@ -44,14 +44,14 @@ const Account = ({setUserInfoo, userInforr}) => {
               style={styles.iconDes}
               source={require("../../assets/icon/date.png")}
             />
-            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>11/12/2021</Text> </Text>
+            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>{(userInforr.result.createdAt).split('T')[0]}</Text> </Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, alignItems: 'center'}}>
             <Image
               style={styles.iconDes}
               source={require("../../assets/icon/create.png")}
             />
-            <Text style={styles.titleDes}>Số bài viết đã đăng: <Text style={{fontWeight: 'bold'}}>12</Text> </Text>
+            <Text style={styles.titleDes}>Email: <Text style={{fontWeight: 'bold'}}>{userInforr.result.email}</Text> </Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, paddingRight: 30,alignItems: 'center'}}>
             <Image

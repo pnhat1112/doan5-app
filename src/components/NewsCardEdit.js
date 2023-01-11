@@ -8,6 +8,7 @@ const NewsCardEdit = ({
   price,
   onPressView,
   onPressLove,
+  onPressDelete
 }) => {
 //   console.log(imageUrl);
   const a = "../../assets/slider2.png";
@@ -30,19 +31,12 @@ const NewsCardEdit = ({
             <Text style={styles.Price}>{price}đ/1 tháng</Text>
             <TouchableOpacity onPress={onPressLove}>
               <Image
-                source={require("../../assets/icon/edit.png")}
-                resizeMode="contain"
-                style={styles.btnLove}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onPressLove}>
-              <Image
                 source={require("../../assets/icon/show.png")}
                 resizeMode="contain"
                 style={styles.btnLove}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPressLove}>
+            <TouchableOpacity onPress={onPressDelete}>
               <Image
                 source={require("../../assets/icon/delete.png")}
                 resizeMode="contain"
