@@ -28,6 +28,7 @@ export default function Login({ navigation }) {
     //   .catch((error) => {
     //     console.error(error);
     //   });
+
     Axios.
     post(`${api}/user/signin/`, {email:"toi6@toi6.com",password:"123456"}, {
         headers: {
@@ -40,6 +41,7 @@ export default function Login({ navigation }) {
       .catch((error) => {
         console.log(error);
       });
+      navigation.navigate("Home");
     // axios
     //   .post('http://192.168.1.111:3000/user/signin', {
     //     email: email,

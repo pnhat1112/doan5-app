@@ -10,7 +10,6 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import { SearchBar } from "react-native-elements";
 import SearchBox from "../components/SearchBox.js";
 import NewsCard from "../components/NewsCard.js";
 // import NewsPage from './NewsPage.js';

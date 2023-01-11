@@ -158,7 +158,7 @@ const Tabs = () => {
                 }
             }}
         />
-        <Tab.Screen name="Account" component={Login} 
+        <Tab.Screen name="Account" component={Account} 
             options= {{
                 tabBarIcon: ({focused}) => {
                 return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-const NewsCard = ({
+const NewsCardEdit = ({
   title,
   imageUrl,
   author,
@@ -30,7 +30,21 @@ const NewsCard = ({
             <Text style={styles.Price}>{price}đ/1 tháng</Text>
             <TouchableOpacity onPress={onPressLove}>
               <Image
-                source={require("../../assets/icon/love.png")}
+                source={require("../../assets/icon/edit.png")}
+                resizeMode="contain"
+                style={styles.btnLove}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onPressLove}>
+              <Image
+                source={require("../../assets/icon/show.png")}
+                resizeMode="contain"
+                style={styles.btnLove}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onPressLove}>
+              <Image
+                source={require("../../assets/icon/delete.png")}
                 resizeMode="contain"
                 style={styles.btnLove}
               />
@@ -42,7 +56,7 @@ const NewsCard = ({
   );
 };
 
-export default NewsCard;
+export default NewsCardEdit;
 
 const styles = StyleSheet.create({
   cardForm: {
