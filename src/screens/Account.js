@@ -50,12 +50,20 @@ const Account = ({navigation}) => {
             />
             <Text style={styles.titleDes}>Số bài viết đã đăng: <Text style={{fontWeight: 'bold'}}>12</Text> </Text>
           </View>
+          
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, paddingRight: 30,alignItems: 'center'}}>
             <Image
               style={styles.iconDes}
               source={require("../../assets/icon/place.png")}
             />
             <Text style={styles.titleDes}>Địa chỉ: <Text style={{fontWeight: 'bold'}}>Trần Đại Nghĩa, Hòa Hải, Ngũ Hành Sơn, Đà Nẵng</Text></Text>
+          </View>
+          <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, alignItems: 'center'}}>
+            <Image
+              style={styles.iconDes}
+              source={require("../../assets/icon/phone.png")}
+            />
+            <Text style={styles.titleDes}>Số điện thoại: <Text style={{fontWeight: 'bold'}}>0708026082</Text> </Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, paddingRight: 30,alignItems: 'center', paddingBottom: 20}}>
             <Image
@@ -87,7 +95,7 @@ const Account = ({navigation}) => {
             <TouchableOpacity style={styles.loginBtn} onPress={() => setModalVisible(true)}>
               <Text>Chỉnh sửa thông tin</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.registerBtn} >
+            <TouchableOpacity style={styles.registerBtn} onPress={ () => navigation.navigate("Register")}>
               <Text style={{color: "#FBD07C"}}>Đăng xuất</Text>
             </TouchableOpacity>
           </View>

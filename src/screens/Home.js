@@ -184,6 +184,7 @@ function NewsPage({ route, navigation }) {
               marginRight: 5,
               borderBottomColor: "#B0B1B1",
               borderBottomWidth: 1,
+              width: 380,
             }}
           >
             <Text style={styles.titleNewsPage}>{data?.item.tieude}</Text>
@@ -199,12 +200,14 @@ function NewsPage({ route, navigation }) {
               </Text>
             </View>
           </View>
+
           <View
             style={{
               marginLeft: 5,
               marginRight: 5,
               borderBottomColor: "#B0B1B1",
               borderBottomWidth: 1,
+              width: 380,
             }}
           >
             <TouchableOpacity
@@ -212,8 +215,6 @@ function NewsPage({ route, navigation }) {
                 alignItems: "center",
                 paddingTop: 10,
                 paddingBottom: 10,
-                marginRight: 280,
-                justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "row",
               }}
