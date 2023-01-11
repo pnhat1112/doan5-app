@@ -12,6 +12,8 @@ import {
 import React, { useState } from "react";
 import Axios from "axios";
 import { api } from "../resources/api.js";
+import {AsyncStorage} from 'react-native';
+import Account from "./Account.js";
 
 
 export default function Login({ navigation }) {
@@ -19,7 +21,7 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validate form and send request to backend
     // Axios.post(`${api}/user/signin/`)
     //   .then((response) => {
@@ -30,18 +32,20 @@ export default function Login({ navigation }) {
     //   });
 
     Axios.
-    post(`${api}/user/signin/`, {email:"toi6@toi6.com",password:"123456"}, {
+    post(`${api}/user/signin/`, {email:email,password:password}, {
         headers: {
           "Content-Type": "application/json"
         },
       })
       .then((response) => {
         console.log(response.data);
+        setUserInfo(response.data)
+        AsyncStorage.setItem('@user', response.data)
+        // AsyncStorage.setItem('user_login', response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-      navigation.navigate("Home");
     // axios
     //   .post('http://192.168.1.111:3000/user/signin', {
     //     email: email,
@@ -60,6 +64,7 @@ export default function Login({ navigation }) {
     // console.log("asdasd")
   };
   return (
+    userInfo == null ? 
     <View style={styles.container}>
       <Text style={styles.title}>Đăng nhập</Text>
       <View style={styles.inputView}>
@@ -107,6 +112,9 @@ export default function Login({ navigation }) {
         <Image source={require("../../assets/login.png")} />
       </View>
     </View>
+    :
+    <Account setUserInfoo = {setUserInfo} userInforr = {userInfo}/>
+    
   );
 }
 

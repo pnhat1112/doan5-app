@@ -8,9 +8,12 @@ import Axios from "axios";
 import { api } from "../resources/api.js";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from 'react-native-elements';
-
-const Account = ({navigation}) => {
+const Account = ({setUserInfoo, userInforr}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const handleSignOut = () =>{
+    setUserInfoo(null)
+    // console.log(userInforr)
+  }
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/slider1.png")}/>
@@ -29,7 +32,7 @@ const Account = ({navigation}) => {
             source={require("../../assets/nhat.png")}
           />
           <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-            <Text style={styles.userName}>Nhật Phạm</Text>
+            <Text style={styles.userName}>{userInforr.details.full_name}</Text>
             <Text style={{marginLeft: 15}}>10 người theo dõi</Text>
           </View>
         </TouchableOpacity>
@@ -55,7 +58,7 @@ const Account = ({navigation}) => {
               style={styles.iconDes}
               source={require("../../assets/icon/place.png")}
             />
-            <Text style={styles.titleDes}>Địa chỉ: <Text style={{fontWeight: 'bold'}}>Trần Đại Nghĩa, Hòa Hải, Ngũ Hành Sơn, Đà Nẵng</Text></Text>
+            <Text style={styles.titleDes}>Địa chỉ: <Text style={{fontWeight: 'bold'}}>{userInforr.details.address}</Text></Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, paddingRight: 30,alignItems: 'center', paddingBottom: 20}}>
             <Image
@@ -87,7 +90,7 @@ const Account = ({navigation}) => {
             <TouchableOpacity style={styles.loginBtn} onPress={() => setModalVisible(true)}>
               <Text>Chỉnh sửa thông tin</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.registerBtn} >
+            <TouchableOpacity style={styles.registerBtn} onPress={handleSignOut} >
               <Text style={{color: "#FBD07C"}}>Đăng xuất</Text>
             </TouchableOpacity>
           </View>

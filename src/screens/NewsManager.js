@@ -16,11 +16,22 @@ import NewsCard from "../components/NewsCard.js";
 import Axios from "axios";
 import { api } from "../resources/api.js";
 import NewsCardEdit from "../components/NewsCardEdit.js";
+import {AsyncStorage} from 'react-native';
+
 
 const NewsManager = ({navigation}) => {
   const [articles, setArticles] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
   const [backup, setBackup] = React.useState([]);
+  const [user, setUser] = React.useState(null);
+
+  useEffect(()=>{
+    const fetchLocal = async () => {
+    const access_token = await AsyncStorage.getItem('@user');
+    setUser(access_token)
+    }
+    fetchLocal()
+  },[])
 
   useEffect(() => {
     Axios.get(`${api}/articles/`, {
@@ -38,29 +49,7 @@ const NewsManager = ({navigation}) => {
   }, []);
   return (
     <View style={styles.container}>
-      <SearchBox 
-      setSearchTextt = {setSearchText}/>
-      <View style={styles.titleForm}>
-        <Text style={styles.title}>Tin của bạn</Text>
-      </View>
-      <View style={{height: 'auto'}}>
-        <FlatList
-          data={articles}
-          renderItem={({ item }) => (
-            <NewsCardEdit
-              title={item.tieude}
-              imageUrl={item.image}
-              author={item.user_id}
-              price={item.price}
-              onPressView={() =>
-                navigation.navigate("NewsPage", { data: { item, setSearchText } })
-              }
-              onPressLove={() => alert("Love")}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <p> {user?.details.full_name} </p>
     </View>
   );
 }
