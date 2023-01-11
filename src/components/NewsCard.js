@@ -17,7 +17,7 @@ const NewsCard = ({
         <Image
           style={{
             width: 150,
-            height: 110,
+            height: 'auto',
             resizeMode: 'cover'
           }}
           source={{ uri: imageUrl }}
