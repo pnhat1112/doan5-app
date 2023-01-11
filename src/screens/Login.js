@@ -40,7 +40,7 @@ export default function Login({ navigation }) {
       .then((response) => {
         console.log(response.data);
         setUserInfo(response.data)
-        AsyncStorage.setItem('@user', response.data)
+        AsyncStorage.setItem('user', response.data)
         // AsyncStorage.setItem('user_login', response.data);
       })
       .catch((error) => {

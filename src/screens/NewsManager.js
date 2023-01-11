@@ -27,7 +27,7 @@ const NewsManager = ({navigation}) => {
 
   useEffect(()=>{
     const fetchLocal = async () => {
-    const access_token = await AsyncStorage.getItem('@user');
+    const access_token = await AsyncStorage.getItem('user');
     setUser(access_token)
     }
     fetchLocal()
