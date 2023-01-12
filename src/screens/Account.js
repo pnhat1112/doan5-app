@@ -55,6 +55,13 @@ const Account = ({setUserInfoo, userInforr}) => {
             />
             <Text style={styles.titleDes}>Email: <Text style={{fontWeight: 'bold'}}>{userInforr.result.email}</Text> </Text>
           </View>
+          <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, alignItems: 'center'}}>
+            <Image
+              style={styles.iconDes}
+              source={require("../../assets/icon/phone.png")}
+            />
+            <Text style={styles.titleDes}>Số điện thoại: <Text style={{fontWeight: 'bold'}}>{userInforr.details.phone}</Text> </Text>
+          </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, paddingRight: 30,alignItems: 'center'}}>
             <Image
               style={styles.iconDes}
