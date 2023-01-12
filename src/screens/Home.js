@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  RefreshControl
 } from "react-native";
 import SearchBox from "../components/SearchBox.js";
 import NewsCard from "../components/NewsCard.js";
@@ -18,6 +19,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Axios from "axios";
 import { api } from "../resources/api.js";
 import { useNavigation } from "@react-navigation/native";
+import {AsyncStorage} from 'react-native';
+
 
 
 const Stack = createStackNavigator();
@@ -57,6 +60,9 @@ const Data = {};
 // export default Home;
 
 export default function Home() {
+  useEffect(()=>{
+    AsyncStorage.setItem('user',"")
+  },[])
   return (
     <Stack.Navigator
       screenOptions={{
@@ -74,6 +80,13 @@ function HomePage({ navigation }) {
   const [searchText, setSearchText] = React.useState("");
   const [articles, setArticles] = React.useState([]);
   const [backup, setBackup] = React.useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Fetch new data here
+    // Once the data is fetched, set refreshing to false
+    setTimeout(() => setRefreshing(false), 2000);
+  }
   useEffect(() => {
     let filteredArr = articles.filter(function(item) {
       return item.tieude.toLowerCase().includes(searchText.toLowerCase()) || item.address.toLowerCase().includes(searchText.toLowerCase());
@@ -99,7 +112,7 @@ function HomePage({ navigation }) {
         // An error occurred
         console.error(error);
       });
-  }, []);
+  }, [refreshing]);
   return (
     <View style={styles.container}>
       <SearchBox 
@@ -109,14 +122,17 @@ function HomePage({ navigation }) {
         <Text style={styles.title}>Tin dành cho bạn</Text>
       </View>
       <View>
+        <ScrollView refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
         <FlatList
           data={articles}
           renderItem={({ item }) => (
             <NewsCard
               title={item.tieude}
               imageUrl={item.image}
-              author={item.user_id}
-              price={item.price}
+              author={item.address}
+              price={item.giatien}
               onPressView={() =>
                 navigation.navigate("NewsPage", { data: { item, setSearchText } })
               }
@@ -125,6 +141,7 @@ function HomePage({ navigation }) {
           )}
           keyExtractor={(item, index) => index.toString()}
         />
+        </ScrollView>
       </View>
     </View>
   );

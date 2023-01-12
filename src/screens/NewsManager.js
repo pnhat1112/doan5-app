@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import SearchBox from "../components/SearchBox.js";
@@ -16,133 +17,165 @@ import NewsCard from "../components/NewsCard.js";
 import Axios from "axios";
 import { api } from "../resources/api.js";
 import NewsCardEdit from "../components/NewsCardEdit.js";
+import { AsyncStorage } from "react-native";
 
 const NewsManager = ({ navigation }) => {
   const [change, setChange] = React.useState(0);
   const [articles, setArticles] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
   const [backup, setBackup] = React.useState([]);
-  // useEffect(()=>{
-  //   const fetchLocal = async () => {
-  //   const access_token = await AsyncStorage.getItem('user');
-  //   setUser(access_token)
-  //   }
-  //   fetchLocal()
-  // },[])
-  const handleStatusChange = async (id,status)=>{
-    console.log(id)
-    Axios.get(
-        `${api}/articles/update-status/${id}/${status}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => {
-            console.log(response.data.message);
-            setChange(change+1)
-            // window.location.reload();
-        })
-        .catch((error) => {
-          // An error occurred
-          console.error(error);
-        });
-  }
-  const handleDelete = async (id)=>{
-    console.log(id)
-    Axios.get(
-        `${api}/articles/remove/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => {
-          console.log(response.data.message);
-          setChange(change+1)
-        })
-        .catch((error) => {
-          // An error occurred
-          console.error(error);
-        });
-  }
+  const [access_token, setAccess_token] = React.useState("");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Fetch new data here
+    // Once the data is fetched, set refreshing to false
+    setTimeout(() => setRefreshing(false), 2000);
+  };
   useEffect(() => {
-    const id = "63bebcca0dcb2df9b911cd8d";
-    Axios.get(`${api}/articles/get-by-id/${id}`, {
+    const fetchLocal = async () => {
+      const access_token = await AsyncStorage.getItem("user");
+      setAccess_token(access_token);
+    };
+    fetchLocal();
+  }, [refreshing]);
+  const handleStatusChange = async (id, status) => {
+    console.log(id);
+    Axios.get(`${api}/articles/update-status/${id}/${status}`, {
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((response) => {
-        setArticles(response.data);
+        console.log(response.data.message);
+        setChange(change + 1);
+        // window.location.reload();
       })
       .catch((error) => {
         // An error occurred
         console.error(error);
       });
-  }, [change]);
+  };
+  const handleDelete = async (id) => {
+    console.log(id);
+    Axios.get(`${api}/articles/remove/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log(response.data.message);
+        setChange(change + 1);
+      })
+      .catch((error) => {
+        // An error occurred
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    if (access_token) {
+      Axios.get(`${api}/articles/get-by-id/${access_token}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          setArticles(response.data);
+        })
+        .catch((error) => {
+          // An error occurred
+          console.error(error);
+        });
+    }
+  }, [change, access_token]);
   return (
     <View style={styles.container}>
       <SearchBox setSearchTextt={setSearchText} />
-      <View style={styles.titleForm}>
-        <Text style={styles.title}>Tin của bạn</Text>
-      </View>
-      <View style={{ height: "auto" }}>
-        <FlatList
-          data={articles}
-          renderItem={({ item }) => (
-            <View>
-              {item.public === true ? (
-                <NewsCardEdit
-                  title={item.tieude}
-                  imageUrl={item.image}
-                  author={item.user_id}
-                  price={item.price}
-                  onPressView={() =>
-                    navigation.navigate("NewsPage", {
-                      data: { item, setSearchText },
-                    })
-                  }
-                  onPressLove={() =>  handleStatusChange(item._id, false)}
-                  onPressDelete={() => handleDelete(item._id)}
-                />
-              ) : null}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
-      <View style={styles.titleForm}>
-        <Text style={styles.title}>Tin đã ẩn</Text>
-      </View>
-      <View style={{ height: "auto" }}>
-        <FlatList
-          data={articles}
-          renderItem={({ item }) => (
-            <View>
-              {item.public === false ? (
-                <NewsCardEdit
-                  title={item.tieude}
-                  imageUrl={item.image}
-                  author={item.user_id}
-                  price={item.price}
-                  onPressView={() =>
-                    navigation.navigate("NewsPage", {
-                      data: { item, setSearchText },
-                    })
-                  }
-                  onPressLove={() => handleStatusChange(item._id, true)}
-                  onPressDelete={() => handleDelete(item._id)}
+      {/* <Text>{access_token ? access_token: "null"}</Text> */}
 
-                />
-              ) : null}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      {access_token ? (
+        <View>
+          <View style={styles.titleForm}>
+            <Text style={styles.title}>Tin của bạn</Text>
+          </View>
+          <View style={{ height: "18%" }}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <FlatList
+                data={articles}
+                renderItem={({ item }) => (
+                  <View>
+                    {item.public === true ? (
+                      <NewsCardEdit
+                        title={item.tieude}
+                        imageUrl={item.image}
+                        author={item.address}
+                        price={item.giatien}
+                        onPressView={() =>
+                          navigation.navigate("NewsPage", {
+                            data: { item, setSearchText },
+                          })
+                        }
+                        onPressLove={() => handleStatusChange(item._id, false)}
+                        onPressDelete={() => handleDelete(item._id)}
+                      />
+                    ) : null}
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </ScrollView>
+          </View>
+          <View style={styles.titleForm}>
+            <Text style={styles.title}>Tin đã ẩn</Text>
+          </View>
+          <View style={{ height: "auto" }}>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            >
+              <FlatList
+                data={articles}
+                renderItem={({ item }) => (
+                  <View>
+                    {item.public === false ? (
+                      <NewsCardEdit
+                        title={item.tieude}
+                        imageUrl={item.image}
+                        author={item.address}
+                        price={item.giatien}
+                        onPressView={() =>
+                          navigation.navigate("NewsPage", {
+                            data: { item, setSearchText },
+                          })
+                        }
+                        onPressLove={() => handleStatusChange(item._id, true)}
+                        onPressDelete={() => handleDelete(item._id)}
+                      />
+                    ) : null}
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </ScrollView>
+          </View>
+        </View>
+      ) : (
+        <View>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          >
+            <Text>Ban chua dang nhap</Text>
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };

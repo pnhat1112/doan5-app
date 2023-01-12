@@ -8,11 +8,13 @@ import Axios from "axios";
 import { api } from "../resources/api.js";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from 'react-native-elements';
+import {AsyncStorage} from 'react-native';
+
 const Account = ({setUserInfoo, userInforr}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const handleSignOut = () =>{
+  const handleSignOut = async() =>{
+    await AsyncStorage.setItem('user',"")
     setUserInfoo(null)
-    // console.log(userInforr)
   }
   return (
     <View style={styles.container}>
@@ -44,7 +46,7 @@ const Account = ({setUserInfoo, userInforr}) => {
               style={styles.iconDes}
               source={require("../../assets/icon/date.png")}
             />
-            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>{(userInforr.result.createdAt).split('T')[0]}</Text> </Text>
+            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>{(userInforr?.result.createdAt).split('T')[0]}</Text> </Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, alignItems: 'center'}}>
             <Image
@@ -85,7 +87,7 @@ const Account = ({setUserInfoo, userInforr}) => {
         <Text style={styles.title}>Thông tin cá nhân</Text>
 
           <View>
-          <MyModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+          <MyModal visible={modalVisible} onClose={() => setModalVisible(false)} infor = {userInforr} />
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingRight: 30}}>
             <TouchableOpacity style={styles.loginBtn} onPress={() => setModalVisible(true)}>
               <Text>Chỉnh sửa thông tin</Text>
@@ -105,32 +107,54 @@ const Account = ({setUserInfoo, userInforr}) => {
 
 export default Account;
 
-function MyModal({ visible, onClose }) {
+function MyModal({ visible, onClose, infor }) {
+  const [name,setName] = useState("")
+  const [address,setAddess] = useState("")
+  const [phone,setPhone] = useState("")
+  const onLuu = () =>{
+    const param = {
+      token: infor.token,
+      user_id: infor.result._id,
+      full_name: name,
+      address: address,
+      phone: phone
+    }
+    // console.log(param)
+    Axios.post(
+      `${api}/user/update`,param,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => {
+        console.error(response.data);
+      })
+      .catch((error) => {
+        // An error occurred
+        console.error(error);
+      });
+    // http://localhost:5000/user/update
+  }
+  useEffect(()=>{
+    setName(infor.details.full_name)
+    setAddess(infor.details.address)
+    setPhone(infor.details.phone)
+  },[])
   return (
     <Modal visible={visible} animationType="slide">
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ width: '80%', backgroundColor: 'white', padding: 20 }}>
-
           <View>
             <Text style={styles.titleName}>Họ và tên</Text>
             <View style={styles.inputView}>
             <TextInput
               style={styles.TextInput}
               autoCapitalize="none"
-              placeholder="Minh Nhật"
-              placeholderTextColor="#003f5c"
+              value={name}
+              onChangeText={(name) => setName(name)}
             />
-            </View>
-          </View>
-          
-          <View>
-            <Text style={styles.titleName}>Ngày sinh</Text>
-            <View style={styles.inputView}>
-              <TextInput
-                style={styles.TextInput}
-                placeholder="11/12/2001"
-                placeholderTextColor="#003f5c"
-              />
             </View>
           </View>
 
@@ -139,8 +163,8 @@ function MyModal({ visible, onClose }) {
             <View style={styles.inputView}>
               <TextInput
                 style={styles.TextInput}
-                placeholder="0313131"
-                placeholderTextColor="#003f5c"
+                value={phone}
+                onChangeText={(phone) => setPhone(phone)}
               />
             </View>
           </View>
@@ -150,13 +174,13 @@ function MyModal({ visible, onClose }) {
             <View style={styles.inputView}>
               <TextInput
                 style={styles.TextInput}
-                placeholder="0313131"
-                placeholderTextColor="#003f5c"
+                value={address}
+                onChangeText={(address) => setAddess(address)}
               />
             </View>
           </View>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingTop: 20, paddingRight: 30}}>
-            <TouchableOpacity style={styles.loginBtn} onPress={onClose}>
+            <TouchableOpacity style={styles.loginBtn} onPress={onLuu}>
               <Text>Lưu thông tin</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.registerBtn} onPress={onClose}>
