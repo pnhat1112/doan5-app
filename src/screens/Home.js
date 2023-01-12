@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   FlatList,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  Linking
 } from "react-native";
 import SearchBox from "../components/SearchBox.js";
 import NewsCard from "../components/NewsCard.js";
@@ -171,6 +172,20 @@ function NewsPage({ route, navigation }) {
   const GoToUser = () => {
     alert(`Go to user:`);
   };
+
+  const phoneCall = async () => {
+    const phoneNumber = 'tel:' + user?.phone;
+    try {
+      const isSupported = await Linking.canOpenURL(phoneNumber);
+      if (isSupported) {
+        await Linking.openURL(phoneNumber);
+      } else {
+        alert('Phone number is not available');
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <ScrollView scrollEnabled>
@@ -201,6 +216,7 @@ function NewsPage({ route, navigation }) {
               marginRight: 5,
               borderBottomColor: "#B0B1B1",
               borderBottomWidth: 1,
+              width: 380,
             }}
           >
             <Text style={styles.titleNewsPage}>{data?.item.tieude}</Text>
@@ -222,15 +238,15 @@ function NewsPage({ route, navigation }) {
               marginRight: 5,
               borderBottomColor: "#B0B1B1",
               borderBottomWidth: 1,
+              width: 380,
+              alignItems: "center",
+              flexDirection: "row",
             }}
           >
             <TouchableOpacity
               style={{
-                alignItems: "center",
                 paddingTop: 10,
                 paddingBottom: 10,
-                marginRight: 280,
-                justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "row",
               }}
@@ -240,6 +256,12 @@ function NewsPage({ route, navigation }) {
                 source={require("../../assets/nhat.png")}
               />
               <Text style={styles.userName}>{user?.full_name}</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity style={{marginLeft: 'auto'}}>
+              <Text style={styles.userName}>{user?.phone}</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.registerBtn} onPress={phoneCall}>
+            <Text style={styles.titlePhone}>Liên hệ</Text>
             </TouchableOpacity>
           </View>
           <View
@@ -468,6 +490,13 @@ const styles = StyleSheet.create({
     color: "#5B5757",
     marginLeft: 20,
   },
+  titlePhone: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#FFF",
+    paddingLeft: 10,
+    paddingRight: 10
+  },
   iconCheck: {
     width: 16,
     height: 16,
@@ -480,5 +509,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#5B5757",
     paddingTop: 10,
+  },
+  registerBtn: {
+    borderRadius: 10,
+    height: 50,
+    width: 'auto',
+    marginLeft: 'auto',
+    justifyContent: "center",
+    backgroundColor: "#FBD07C",
+    borderWidth: 1,
+    borderColor: "#FBD07C",
   },
 });

@@ -46,7 +46,7 @@ const Account = ({setUserInfoo, userInforr}) => {
               style={styles.iconDes}
               source={require("../../assets/icon/date.png")}
             />
-            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>{(userInforr?.result.createdAt).split('T')[0]}</Text> </Text>
+            <Text style={styles.titleDes}>Ngày tham gia: <Text style={{fontWeight: 'bold'}}>{(userInforr?.result.createdAt)}</Text> </Text>
           </View>
           <View style={{flexDirection: 'row',paddingTop: 15, paddingLeft: 30, alignItems: 'center'}}>
             <Image
